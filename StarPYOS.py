@@ -701,9 +701,15 @@ Links:
         rows = min(self.terminal_height, 30)
         drops = [0] * cols
         chars = ['0', '1', 'ア', 'イ', 'ウ', 'エ', 'オ', 'カ', 'キ', 'ク']
+        # ANSI: hide cursor, then use cursor-home each frame to avoid clear flash
+        CURSOR_HOME = "\033[H"
+        CURSOR_HIDE = "\033[?25l"
+        CURSOR_SHOW = "\033[?25h"
+        sys.stdout.write(CURSOR_HIDE)
+        sys.stdout.flush()
+        self._clear_screen()
         try:
             while True:
-                self._clear_screen()
                 # Update drops
                 for i in range(cols):
                     if random.random() < 0.02:
@@ -712,7 +718,8 @@ Links:
                         drops[i] += 1
                     else:
                         drops[i] = 0
-                # Draw grid: each row, then each column
+                # Build full frame then draw in one go (reduces flicker)
+                sys.stdout.write(CURSOR_HOME)
                 for j in range(rows):
                     line = ""
                     for i in range(cols):
@@ -724,10 +731,14 @@ Links:
                             line += Fore.GREEN + random.choice(chars)
                         else:
                             line += " "
-                    print(line + Style.RESET_ALL)
+                    sys.stdout.write(line + Style.RESET_ALL + "\n")
+                sys.stdout.flush()
                 time.sleep(0.05)
         except KeyboardInterrupt:
-            print("\n")
+            pass
+        finally:
+            sys.stdout.write(CURSOR_SHOW)
+            sys.stdout.flush()
         self._clear_screen()
 
     def cava(self, args):
@@ -736,21 +747,27 @@ Links:
         time.sleep(1)
         bars = 80
         max_height = 20
+        header = Fore.CYAN + "♪ Now Playing: Simulated Audio Track ♪".center(self.terminal_width) + Style.RESET_ALL
+        footer = Fore.CYAN + "Bass".ljust(20) + "Mid".ljust(40) + "Treble".rjust(20) + Style.RESET_ALL
+        CURSOR_HOME = "\033[H"
+        CURSOR_HIDE = "\033[?25l"
+        CURSOR_SHOW = "\033[?25h"
+        sys.stdout.write(CURSOR_HIDE)
+        sys.stdout.flush()
+        self._clear_screen()
         try:
             beat = 0
             while True:
-                self._clear_screen()
-                print(Fore.CYAN + "♪ Now Playing: Simulated Audio Track ♪".center(self.terminal_width) + Style.RESET_ALL)
-                print()
                 # Generate simulated audio levels
                 levels = []
                 for i in range(bars):
-                    # Create a wave pattern with some randomness
                     base = int(max_height * abs(math.sin((i + beat) * 0.1)))
                     variation = random.randint(-3, 3)
                     level = max(0, min(max_height, base + variation))
                     levels.append(level)
-                # Draw the visualization
+                # Build full frame and draw in one go
+                sys.stdout.write(CURSOR_HOME)
+                sys.stdout.write(header + "\n\n")
                 for h in range(max_height, 0, -1):
                     line = ""
                     for level in levels:
@@ -763,15 +780,17 @@ Links:
                                 line += Fore.GREEN + "█"
                         else:
                             line += " "
-                    print(line + Style.RESET_ALL)
-                # Show frequency bands
-                print()
-                print(Fore.CYAN + "Bass".ljust(20) + "Mid".ljust(40) + "Treble".rjust(20) + Style.RESET_ALL)
+                    sys.stdout.write(line + Style.RESET_ALL + "\n")
+                sys.stdout.write("\n" + footer + "\n")
+                sys.stdout.flush()
                 beat += 1
                 time.sleep(0.05)
         except KeyboardInterrupt:
-            print("\n")
-            self._clear_screen()
+            pass
+        finally:
+            sys.stdout.write(CURSOR_SHOW)
+            sys.stdout.flush()
+        self._clear_screen()
 
     def mc(self, args):
         current_selection = 0
@@ -1094,21 +1113,32 @@ Links:
         ]
         colors = [Fore.RED, Fore.YELLOW, Fore.GREEN, Fore.CYAN, Fore.BLUE, Fore.MAGENTA]
         print("\n" + Fore.YELLOW + "Press Ctrl+C to stop" + Style.RESET_ALL + "\n")
+        CURSOR_HOME = "\033[H"
+        CURSOR_HIDE = "\033[?25l"
+        CURSOR_SHOW = "\033[?25h"
+        sys.stdout.write(CURSOR_HIDE)
+        sys.stdout.flush()
+        self._clear_screen()
         try:
             frame_idx = 0
             color_idx = 0
             while True:
-                self._clear_screen()
-                print()
+                sys.stdout.write(CURSOR_HOME)
+                sys.stdout.write("\n")
                 color = colors[color_idx % len(colors)]
                 for line in frames[frame_idx]:
-                    print(color + line + Style.RESET_ALL)
-                print("\n" + Fore.CYAN + "~~ NYAN NYAN ~~" + Style.RESET_ALL)
+                    sys.stdout.write(color + line + Style.RESET_ALL + "\n")
+                sys.stdout.write("\n" + Fore.CYAN + "~~ NYAN NYAN ~~" + Style.RESET_ALL + "\n")
+                sys.stdout.flush()
                 frame_idx = (frame_idx + 1) % len(frames)
                 color_idx += 1
                 time.sleep(0.2)
         except KeyboardInterrupt:
-            print("\n")
+            pass
+        finally:
+            sys.stdout.write(CURSOR_SHOW)
+            sys.stdout.flush()
+        self._clear_screen()
 
     def vim(self, args):
         if not args:
@@ -1140,28 +1170,29 @@ Links:
     def htop(self, args):
         print(Fore.YELLOW + "Press Ctrl+C to exit" + Style.RESET_ALL)
         time.sleep(1)
+        CURSOR_HOME = "\033[H"
+        CURSOR_HIDE = "\033[?25l"
+        CURSOR_SHOW = "\033[?25h"
+        sys.stdout.write(CURSOR_HIDE)
+        sys.stdout.flush()
+        self._clear_screen()
         try:
             while True:
-                self._clear_screen()
-                print(Fore.GREEN + Style.BRIGHT + "htop - Interactive Process Viewer".center(self.terminal_width) + Style.RESET_ALL)
-                print()
+                lines = [Fore.GREEN + Style.BRIGHT + "htop - Interactive Process Viewer".center(self.terminal_width) + Style.RESET_ALL, ""]
                 for i in range(8):
                     usage = random.randint(10, 95)
                     bar_len = int(usage / 5)
                     bar = "█" * bar_len + " " * (20 - bar_len)
                     color = Fore.GREEN if usage < 50 else Fore.YELLOW if usage < 80 else Fore.RED
-                    print(f"  {i+1} [{color}{bar}{Style.RESET_ALL}] {usage:>3}%")
+                    lines.append(f"  {i+1} [{color}{bar}{Style.RESET_ALL}] {usage:>3}%")
                 mem_usage = random.randint(20, 60)
                 mem_bar = "█" * int(mem_usage / 5) + " " * (20 - int(mem_usage / 5))
-                print(f"\nMem[{Fore.CYAN}{mem_bar}{Style.RESET_ALL}] {mem_usage}% 4.2G/16.0G")
+                lines.extend(["", f"Mem[{Fore.CYAN}{mem_bar}{Style.RESET_ALL}] {mem_usage}% 4.2G/16.0G"])
                 swap_usage = random.randint(0, 20)
                 swap_bar = "█" * int(swap_usage / 5) + " " * (20 - int(swap_usage / 5))
-                print(f"  Swp[{Fore.YELLOW}{swap_bar}{Style.RESET_ALL}] {swap_usage}% 512M/8.0G")
-                print()
-                print(f"  Tasks: {Fore.CYAN}127{Style.RESET_ALL}, Load avg: {Fore.GREEN}1.2 1.5 1.8{Style.RESET_ALL}")
-                print(f"  Uptime: {Fore.YELLOW}2:15:34{Style.RESET_ALL}")
-                print()
-                print(f"  {Fore.BLACK}{Back.CYAN}  PID USER      CPU% MEM%   TIME+ COMMAND            {Style.RESET_ALL}")
+                lines.append(f"  Swp[{Fore.YELLOW}{swap_bar}{Style.RESET_ALL}] {swap_usage}% 512M/8.0G")
+                lines.extend(["", f"  Tasks: {Fore.CYAN}127{Style.RESET_ALL}, Load avg: {Fore.GREEN}1.2 1.5 1.8{Style.RESET_ALL}", f"  Uptime: {Fore.YELLOW}2:15:34{Style.RESET_ALL}", ""])
+                lines.append(f"  {Fore.BLACK}{Back.CYAN}  PID USER      CPU% MEM%   TIME+ COMMAND            {Style.RESET_ALL}")
                 processes = [
                     (1234, "kenzo", random.randint(0, 15), random.randint(1, 5), "1:23.45", "python"),
                     (5678, "kenzo", random.randint(0, 25), random.randint(2, 8), "0:45.12", "chrome"),
@@ -1171,39 +1202,52 @@ Links:
                     (5161, "root", random.randint(0, 5), random.randint(0, 2), "0:05.23", "sshd"),
                 ]
                 for pid, user, cpu, mem, ptime, cmd in processes:
-                    print(f"  {pid:>5} {user:<9} {cpu:>4}% {mem:>4}% {ptime:>7} {cmd:<20}")
+                    lines.append(f"  {pid:>5} {user:<9} {cpu:>4}% {mem:>4}% {ptime:>7} {cmd:<20}")
+                sys.stdout.write(CURSOR_HOME)
+                sys.stdout.write("\n".join(lines) + "\n")
+                sys.stdout.flush()
                 time.sleep(1)
         except KeyboardInterrupt:
-            print("\n")
+            pass
+        finally:
+            sys.stdout.write(CURSOR_SHOW)
+            sys.stdout.flush()
+        self._clear_screen()
 
     def btop(self, args):
         print(Fore.YELLOW + "Press Ctrl+C to exit" + Style.RESET_ALL)
         time.sleep(1)
+        CURSOR_HOME = "\033[H"
+        CURSOR_HIDE = "\033[?25l"
+        CURSOR_SHOW = "\033[?25h"
+        sys.stdout.write(CURSOR_HIDE)
+        sys.stdout.flush()
+        self._clear_screen()
         try:
             while True:
-                self._clear_screen()
-                print(Fore.MAGENTA + Style.BRIGHT + "╔" + "═" * (self.terminal_width - 2) + "╗" + Style.RESET_ALL)
-                print(Fore.MAGENTA + Style.BRIGHT + "║" + "BTOP++ v1.2.13".center(self.terminal_width - 2) + "║" + Style.RESET_ALL)
-                print(Fore.MAGENTA + Style.BRIGHT + "╚" + "═" * (self.terminal_width - 2) + "╝" + Style.RESET_ALL)
-                print()
-                print(Fore.CYAN + "  CPU [8 cores]" + Style.RESET_ALL)
+                lines = [
+                    Fore.MAGENTA + Style.BRIGHT + "╔" + "═" * (self.terminal_width - 2) + "╗" + Style.RESET_ALL,
+                    Fore.MAGENTA + Style.BRIGHT + "║" + "BTOP++ v1.2.13".center(self.terminal_width - 2) + "║" + Style.RESET_ALL,
+                    Fore.MAGENTA + Style.BRIGHT + "╚" + "═" * (self.terminal_width - 2) + "╝" + Style.RESET_ALL,
+                    "",
+                    Fore.CYAN + "  CPU [8 cores]" + Style.RESET_ALL,
+                ]
                 for i in range(8):
                     usage = random.randint(5, 85)
                     graph = "".join([random.choice(["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]) for _ in range(80)])
                     color = Fore.GREEN if usage < 50 else Fore.YELLOW if usage < 75 else Fore.RED
-                    print(f"  {i+1}: {color}{graph}{Style.RESET_ALL} {usage}%")
-                print()
+                    lines.append(f"  {i+1}: {color}{graph}{Style.RESET_ALL} {usage}%")
+                lines.append("")
                 mem = random.randint(35, 65)
                 mem_graph = "█" * int(mem * 0.8) + "░" * (80 - int(mem * 0.8))
-                print(f"  {Fore.BLUE}MEM [{mem_graph}] {mem}%{Style.RESET_ALL}")
+                lines.append(f"  {Fore.BLUE}MEM [{mem_graph}] {mem}%{Style.RESET_ALL}")
                 disk = random.randint(40, 70)
                 disk_graph = "█" * int(disk * 0.8) + "░" * (80 - int(disk * 0.8))
-                print(f"  {Fore.YELLOW}DSK [{disk_graph}] {disk}%{Style.RESET_ALL}")
+                lines.append(f"  {Fore.YELLOW}DSK [{disk_graph}] {disk}%{Style.RESET_ALL}")
                 net_up = random.randint(100, 999)
                 net_down = random.randint(500, 2000)
-                print(f"\n{Fore.GREEN}NET ↑{net_up}KB/s ↓{net_down}KB/s{Style.RESET_ALL}")
-                print()
-                print(Fore.CYAN + "  Top Processes:" + Style.RESET_ALL)
+                lines.extend(["", f"{Fore.GREEN}NET ↑{net_up}KB/s ↓{net_down}KB/s{Style.RESET_ALL}", ""])
+                lines.append(Fore.CYAN + "  Top Processes:" + Style.RESET_ALL)
                 procs = [
                     ("python", random.randint(5, 25)),
                     ("chrome", random.randint(10, 35)),
@@ -1212,10 +1256,17 @@ Links:
                 ]
                 for proc, cpu in procs:
                     bar = "█" * int(cpu) + "░" * (50 - int(cpu))
-                    print(f"    {proc:<12} [{Fore.GREEN}{bar}{Style.RESET_ALL}] {cpu}%")
+                    lines.append(f"    {proc:<12} [{Fore.GREEN}{bar}{Style.RESET_ALL}] {cpu}%")
+                sys.stdout.write(CURSOR_HOME)
+                sys.stdout.write("\n".join(lines) + "\n")
+                sys.stdout.flush()
                 time.sleep(0.5)
         except KeyboardInterrupt:
-            print("\n")
+            pass
+        finally:
+            sys.stdout.write(CURSOR_SHOW)
+            sys.stdout.flush()
+        self._clear_screen()
 
     def cowsay(self, args):
         if not args:
@@ -1236,52 +1287,62 @@ Links:
         print(Fore.GREEN + "HOLLYWOOD HACKER MODE" + Style.RESET_ALL)
         print(Fore.YELLOW + "Press Ctrl+C to exit" + Style.RESET_ALL)
         time.sleep(1)
+        CURSOR_HOME = "\033[H"
+        CURSOR_HIDE = "\033[?25l"
+        CURSOR_SHOW = "\033[?25h"
+        sys.stdout.write(CURSOR_HIDE)
+        sys.stdout.flush()
+        self._clear_screen()
         try:
             iteration = 0
             while True:
-                self._clear_screen()
-                print(Fore.GREEN + Style.BRIGHT + "╔" + "═" * (self.terminal_width - 2) + "╗" + Style.RESET_ALL)
-                print(Fore.GREEN + Style.BRIGHT + "║" + "CLASSIFIED HACKING OPERATION v4.7".center(self.terminal_width - 2) + "║" + Style.RESET_ALL)
-                print(Fore.GREEN + Style.BRIGHT + "╚" + "═" * (self.terminal_width - 2) + "╝" + Style.RESET_ALL)
-                print()
-                print(Fore.CYAN + "┌─ PORT SCANNER " + "─" * (self.terminal_width - 20) + "┐" + Style.RESET_ALL)
+                lines = [
+                    Fore.GREEN + Style.BRIGHT + "╔" + "═" * (self.terminal_width - 2) + "╗" + Style.RESET_ALL,
+                    Fore.GREEN + Style.BRIGHT + "║" + "CLASSIFIED HACKING OPERATION v4.7".center(self.terminal_width - 2) + "║" + Style.RESET_ALL,
+                    Fore.GREEN + Style.BRIGHT + "╚" + "═" * (self.terminal_width - 2) + "╝" + Style.RESET_ALL,
+                    "",
+                    Fore.CYAN + "┌─ PORT SCANNER " + "─" * (self.terminal_width - 20) + "┐" + Style.RESET_ALL,
+                ]
                 for i in range(3):
                     port = random.randint(1000, 9999)
                     status = random.choice(["OPEN", "CLOSED", "FILTERED"])
                     color = Fore.GREEN if status == "OPEN" else Fore.RED
-                    print(f"│ Port {port}: {color}{status}{Style.RESET_ALL}")
-                print(Fore.CYAN + "└" + "─" * (self.terminal_width - 2) + "┘" + Style.RESET_ALL)
-                print()
-                print(Fore.YELLOW + "┌─ NETWORK TRAFFIC " + "─" * (self.terminal_width - 22) + "┐" + Style.RESET_ALL)
+                    lines.append(f"│ Port {port}: {color}{status}{Style.RESET_ALL}")
+                lines.extend([Fore.CYAN + "└" + "─" * (self.terminal_width - 2) + "┘" + Style.RESET_ALL, ""])
+                lines.append(Fore.YELLOW + "┌─ NETWORK TRAFFIC " + "─" * (self.terminal_width - 22) + "┐" + Style.RESET_ALL)
                 for i in range(3):
                     ip = f"192.168.{random.randint(1,255)}.{random.randint(1,255)}"
                     packets = random.randint(100, 9999)
-                    print(f"│ {ip} → {packets} packets")
-                print(Fore.YELLOW + "└" + "─" * (self.terminal_width - 2) + "┘" + Style.RESET_ALL)
-                print()
-                print(Fore.MAGENTA + "┌─ DECRYPTION ENGINE " + "─" * (self.terminal_width - 24) + "┐" + Style.RESET_ALL)
+                    lines.append(f"│ {ip} → {packets} packets")
+                lines.extend([Fore.YELLOW + "└" + "─" * (self.terminal_width - 2) + "┘" + Style.RESET_ALL, ""])
+                lines.append(Fore.MAGENTA + "┌─ DECRYPTION ENGINE " + "─" * (self.terminal_width - 24) + "┐" + Style.RESET_ALL)
                 for i in range(2):
                     hex_str = ''.join([random.choice('0123456789ABCDEF') for _ in range(32)])
-                    print(f"│ 0x{hex_str}")
+                    lines.append(f"│ 0x{hex_str}")
                     progress = random.randint(60, 99)
                     bar_len = int(progress * 0.8)
                     bar = "█" * bar_len + "░" * (80 - bar_len)
-                    print(f"│ [{Fore.GREEN}{bar}{Style.RESET_ALL}] {progress}%")
-                print(Fore.MAGENTA + "└" + "─" * (self.terminal_width - 2) + "┘" + Style.RESET_ALL)
-                print()
-                print(Fore.RED + "┌─ SYSTEM ACCESS " + "─" * (self.terminal_width - 20) + "┐" + Style.RESET_ALL)
+                    lines.append(f"│ [{Fore.GREEN}{bar}{Style.RESET_ALL}] {progress}%")
+                lines.extend([Fore.MAGENTA + "└" + "─" * (self.terminal_width - 2) + "┘" + Style.RESET_ALL, ""])
+                lines.append(Fore.RED + "┌─ SYSTEM ACCESS " + "─" * (self.terminal_width - 20) + "┐" + Style.RESET_ALL)
                 statuses = ["ATTEMPTING", "BYPASSING", "CRACKING", "ACCESSING"]
                 for i in range(2):
                     status = random.choice(statuses)
                     target = random.choice(["firewall", "database", "mainframe", "server"])
-                    print(f"│ {status} {target}...")
-                print(Fore.RED + "└" + "─" * (self.terminal_width - 2) + "┘" + Style.RESET_ALL)
-                print()
-                print(Fore.GREEN + f"STATUS: {'▓' * random.randint(10, 50)} BREACHING MAINFRAME..." + Style.RESET_ALL)
+                    lines.append(f"│ {status} {target}...")
+                lines.extend([Fore.RED + "└" + "─" * (self.terminal_width - 2) + "┘" + Style.RESET_ALL, ""])
+                lines.append(Fore.GREEN + f"STATUS: {'▓' * random.randint(10, 50)} BREACHING MAINFRAME..." + Style.RESET_ALL)
+                sys.stdout.write(CURSOR_HOME)
+                sys.stdout.write("\n".join(lines) + "\n")
+                sys.stdout.flush()
                 iteration += 1
                 time.sleep(0.3)
         except KeyboardInterrupt:
-            print("\n" + Fore.RED + "OPERATION TERMINATED" + Style.RESET_ALL + "\n")
+            pass
+        finally:
+            sys.stdout.write(CURSOR_SHOW)
+            sys.stdout.flush()
+        print("\n" + Fore.RED + "OPERATION TERMINATED" + Style.RESET_ALL + "\n")
 
     def help(self, args):
         print(Fore.MAGENTA + "═" * self.terminal_width + Style.RESET_ALL)
