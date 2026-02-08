@@ -1,4 +1,4 @@
-# Star-PY-OS
+# Star OS
 
 Welcome to Star PY OS, it's a simulated GNU/Linux terminal box 
 based off Python. Pretty cool right?
