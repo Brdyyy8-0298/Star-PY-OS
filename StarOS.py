@@ -16,7 +16,7 @@ class SimpleShell:
         self.current_dir = "/home/user"
         self.filesystem, self.files = self._get_initial_state()
         self.username = "user"
-        self.hostname = "Star-PY-OS"
+        self.hostname = "Star-OS"
         self.is_root = False
         self.installed_packages = ["python", "nano", "vim", "htop", "btop", "cowsay", "fastfetch", "lynx", "cmatrix", "cava"]
         # Use dynamic terminal size for better 1920x1080 support
@@ -27,12 +27,12 @@ class SimpleShell:
     def _get_initial_state(self):
         """Return fresh (filesystem, files) for guest OS reset/format/reboot. Does not touch host."""
         readme_content = """╔═══════════════════════════════════════════════════════════════════════════════════╗
-║                          WELCOME TO STAR PY OS                                    ║
+║                            WELCOME TO STAR OS                                     ║
 ╚═══════════════════════════════════════════════════════════════════════════════════╝
-Welcome to Star PY OS, it's a simulated GNU/Linux terminal box
+Welcome to Star OS, it's a simulated GNU/Linux terminal box
 based off Python. Pretty cool right?
 Type 'help' to view all commands!
-📦 View on GitHub: https://github.com/Brdyyy8-0298/Star-PY-OS
+📦 View on GitHub: https://github.com/Brdyyy8-0298/Star-OS
 🤖 Created by: Claude Sonnet 4.5
 💻 Written in: Python
 🔧 Customizable: You can modify all the code or ask an AI to view
@@ -52,7 +52,7 @@ Features:
 • Prank tools (virus, trojan, ransomware generators)
 • Enhanced Midnight Commander with full features
 • And much more!
-Enjoy exploring Star PY OS! ⭐
+Enjoy exploring Star OS! ⭐
 """
         filesystem = {
             "/": ["home", "usr", "etc", "var", "tmp", "root"],
@@ -75,12 +75,12 @@ Enjoy exploring Star PY OS! ⭐
 
     def boot_screen(self):
         self._clear_screen()
-        print(Fore.MAGENTA + Style.BRIGHT + "Starting Star PY OS...".center(self.terminal_width) + Style.RESET_ALL)
+        print(Fore.MAGENTA + Style.BRIGHT + "Starting Star OS...".center(self.terminal_width) + Style.RESET_ALL)
         time.sleep(0.5)
         boot_msgs = [
             "[    0.000000] Linux version 6.17.0-star-py-1",
             "[    0.100000] Command line: BOOT_IMAGE=/vmlinuz-star root=/dev/sda1",
-            "[    0.250000] Star PY OS based on GNU/Linux",
+            "[    0.250000] Star OS based on GNU/Linux",
             "[    0.500000] Memory: 16384MB available",
             "[    1.000000] PCI: Using configuration type 1",
             "[    1.500000] ACPI: Core revision 20230331",
@@ -106,7 +106,7 @@ Enjoy exploring Star PY OS! ⭐
             time.sleep(0.15)
         time.sleep(0.5)
         print()
-        print(Fore.MAGENTA + "Star PY OS 6.17.0-star-py-1 (tty1)".center(self.terminal_width) + Style.RESET_ALL)
+        print(Fore.MAGENTA + "Star OS 6.17.0-star-1 (tty1)".center(self.terminal_width) + Style.RESET_ALL)
         print()
         time.sleep(0.3)
         print(Fore.WHITE + f"{self.hostname} login: " + Fore.CYAN + self.username + Style.RESET_ALL)
@@ -631,14 +631,14 @@ Featured Repositories:
 • [react] - A JavaScript library for building user interfaces
 """
             },
-            "https://github.com/Brdyyy8-0298/Star-PY-OS": {
-                "title": "Star-PY-OS - Simulated Linux Terminal",
+            "https://github.com/Brdyyy8-0298/Star-OS": {
+                "title": "Star-OS - Simulated Linux Terminal",
                 "content": """
-Star-PY-OS
+Star-OS
 A fully simulated GNU/Linux terminal environment written in Python
 ⭐ Star this repository
 About:
-Star PY OS is a complete simulation of a Linux terminal with
+Star OS is a complete simulation of a Linux terminal with
 features including package management, file editing, system
 monitors, web browsing, and more - all in pure Python!
 Features:
@@ -673,7 +673,7 @@ Links:
             print("Available pages:")
             print("• https://example.com")
             print("• https://github.com")
-            print("• https://github.com/Brdyyy8-0298/Star-PY-OS")
+            print("• https://github.com/Brdyyy8-0298/Star-OS")
             print()
             print(Fore.BLUE + "─" * self.terminal_width + Style.RESET_ALL)
             print(Fore.CYAN + "Commands: [Q]uit | [G]o to URL | [H]elp" + Style.RESET_ALL)
@@ -1079,29 +1079,43 @@ Links:
         print_tree(path)
 
     def fastfetch(self, args):
+        # Cooler ASCII art logo with gradient colors
         logo = [
-            "    ⭐ STAR  ",
-            "   ⭐⭐⭐⭐  ",
-            "  ⭐ PY OS ⭐ ",
-            "   ⭐⭐⭐⭐  ",
-            "    ⭐⭐⭐   ",
+            (Fore.CYAN + "        ✦ " + Fore.MAGENTA + "★" + Fore.CYAN + " ✦        ", ""),
+            (Fore.CYAN + "      " + Fore.MAGENTA + "★" + Fore.YELLOW + "═══" + Fore.MAGENTA + "★" + Fore.YELLOW + "═══" + Fore.MAGENTA + "★" + Fore.CYAN + "      ", ""),
+            (Fore.YELLOW + "    " + Fore.MAGENTA + "★" + Fore.CYAN + "═══" + Fore.YELLOW + "╣" + Style.BRIGHT + Fore.WHITE + "STAR" + Style.NORMAL + Fore.YELLOW + "╠═══" + Fore.MAGENTA + "★" + Fore.YELLOW + "    ", ""),
+            (Fore.YELLOW + "    " + Fore.CYAN + "║  " + Fore.MAGENTA + "★" + Style.BRIGHT + Fore.WHITE + " OS " + Style.NORMAL + Fore.MAGENTA + "★" + Fore.CYAN + "  ║" + Fore.YELLOW + "    ", ""),
+            (Fore.CYAN + "      " + Fore.MAGENTA + "★" + Fore.YELLOW + "═══" + Fore.MAGENTA + "★" + Fore.YELLOW + "═══" + Fore.MAGENTA + "★" + Fore.CYAN + "      ", ""),
+            (Fore.CYAN + "        ✦ " + Fore.MAGENTA + "★" + Fore.CYAN + " ✦        ", ""),
+            ("", ""),
         ]
+        
+        # System info with color coding
+        separator = Fore.CYAN + "─" * 25 + Style.RESET_ALL
         info = [
-            f"{Fore.MAGENTA}{self.username}@{self.hostname}{Style.RESET_ALL}",
-            "-------------------",
-            f"{Fore.MAGENTA}OS{Style.RESET_ALL}: Star PY OS x86_64",
-            f"{Fore.MAGENTA}Based on{Style.RESET_ALL}: GNU/Linux",
-            f"{Fore.MAGENTA}Kernel{Style.RESET_ALL}: 6.17.0-star-py-1",
-            f"{Fore.MAGENTA}Uptime{Style.RESET_ALL}: 2 mins",
-            f"{Fore.MAGENTA}Shell{Style.RESET_ALL}: python-shell",
-            f"{Fore.MAGENTA}Terminal{Style.RESET_ALL}: /dev/tty1",
-            f"{Fore.MAGENTA}CPU{Style.RESET_ALL}: Intel Core i7 (8) @ 3.6GHz",
-            f"{Fore.MAGENTA}Memory{Style.RESET_ALL}: 2048MiB / 16384MiB",
+            f"{Style.BRIGHT}{Fore.YELLOW}{self.username}{Fore.WHITE}@{Fore.MAGENTA}{self.hostname}{Style.RESET_ALL}",
+            separator,
+            f"{Fore.CYAN}OS        {Fore.WHITE}Star OS {Fore.YELLOW}x86_64{Style.RESET_ALL}",
+            f"{Fore.CYAN}Kernel    {Fore.WHITE}6.17.0-star-1{Style.RESET_ALL}",
+            f"{Fore.CYAN}Uptime    {Fore.WHITE}2 mins{Style.RESET_ALL}",
+            f"{Fore.CYAN}Shell     {Fore.WHITE}python-shell{Style.RESET_ALL}",
+            f"{Fore.CYAN}Terminal  {Fore.WHITE}/dev/tty1{Style.RESET_ALL}",
+            f"{Fore.CYAN}CPU       {Fore.WHITE}Intel Core i7 (8) {Fore.YELLOW}@ 3.6GHz{Style.RESET_ALL}",
+            f"{Fore.CYAN}Memory    {Fore.YELLOW}2048{Fore.WHITE}MiB {Fore.CYAN}/{Fore.YELLOW} 16384{Fore.WHITE}MiB{Style.RESET_ALL}",
+            "",
+            # Color blocks
+            f"{Back.BLACK}   {Back.RED}   {Back.GREEN}   {Back.YELLOW}   {Back.BLUE}   {Back.MAGENTA}   {Back.CYAN}   {Back.WHITE}   {Style.RESET_ALL}",
         ]
+        
+        # Print logo and info side by side
         for i in range(max(len(logo), len(info))):
-            logo_line = Fore.YELLOW + logo[i] + Style.RESET_ALL if i < len(logo) else " " * 15
+            if i < len(logo):
+                logo_line = logo[i][0]
+            else:
+                logo_line = " " * 24
+            
             info_line = info[i] if i < len(info) else ""
-            print(f"{logo_line}   {info_line}")
+            print(f"{logo_line}  {info_line}{Style.RESET_ALL}")
 
     def nyancat(self, args):
         frames = [
@@ -1285,7 +1299,7 @@ Links:
 
     def cowsay(self, args):
         if not args:
-            text = "Hello from Star PY OS!"
+            text = "Hello from Star OS!"
         else:
             text = " ".join(args)
         text_len = len(text)
@@ -1364,8 +1378,8 @@ Links:
         print("\n" + Fore.RED + "OPERATION TERMINATED" + Style.RESET_ALL + "\n")
 
     def reboot(self, args):
-        """Reboot the guest OS (Star PY OS) only. Host is not touched."""
-        print(Fore.YELLOW + "Broadcast message from root@Star-PY-OS (tty1):" + Style.RESET_ALL)
+        """Reboot the guest OS (Star OS) only. Host is not touched."""
+        print(Fore.YELLOW + "Broadcast message from root@Star-OS (tty1):" + Style.RESET_ALL)
         print(Fore.YELLOW + "  The system is going down for reboot NOW!" + Style.RESET_ALL)
         print()
         for msg in [
@@ -1389,8 +1403,8 @@ Links:
         self.boot_screen()
 
     def shutdown(self, args):
-        """Shut down the guest OS (exit Star PY OS). Host is not touched."""
-        print(Fore.YELLOW + "Broadcast message from root@Star-PY-OS:" + Style.RESET_ALL)
+        """Shut down the guest OS (exit Star OS). Host is not touched."""
+        print(Fore.YELLOW + "Broadcast message from root@Star-OS:" + Style.RESET_ALL)
         print(Fore.YELLOW + "  The system is going down for halt NOW!" + Style.RESET_ALL)
         print()
         for msg in [
@@ -1406,7 +1420,7 @@ Links:
             time.sleep(0.15)
         time.sleep(0.3)
         print(Fore.RED + "System halted." + Style.RESET_ALL)
-        print(Fore.CYAN + "Star PY OS (guest) has shut down. Goodbye!" + Style.RESET_ALL)
+        print(Fore.CYAN + "Star OS (guest) has shut down. Goodbye!" + Style.RESET_ALL)
         print()
 
     def format_drive(self, args):
@@ -1427,7 +1441,7 @@ Links:
 
     def reset(self, args):
         """Factory reset the guest OS. Restores filesystem, packages, and state. Host unchanged."""
-        print(Fore.YELLOW + "Resetting Star PY OS (guest) to factory state..." + Style.RESET_ALL)
+        print(Fore.YELLOW + "Resetting Star OS (guest) to factory state..." + Style.RESET_ALL)
         for pct in range(0, 101, 12):
             bar_len = int(pct * 0.5)
             bar = "█" * bar_len + "░" * (50 - bar_len)
@@ -1444,7 +1458,7 @@ Links:
 
     def help(self, args):
         print(Fore.MAGENTA + "═" * self.terminal_width + Style.RESET_ALL)
-        print(Fore.MAGENTA + Style.BRIGHT + "STAR PY OS - Available Commands".center(self.terminal_width) + Style.RESET_ALL)
+        print(Fore.MAGENTA + Style.BRIGHT + "STAR OS - Available Commands".center(self.terminal_width) + Style.RESET_ALL)
         print(Fore.MAGENTA + "═" * self.terminal_width + Style.RESET_ALL)
         print()
         cmds = [
@@ -1493,7 +1507,7 @@ Links:
                 ("ransomware", "Ransomware simulator (CODE IN FILENAME)"),
             ]),
             ("SYSTEM (Guest OS only)", [
-                ("reboot", "Reboot Star PY OS (guest only); shows boot screen again"),
+                ("reboot", "Reboot Star OS (guest only); shows boot screen again"),
                 ("shutdown", "Shut down guest OS and exit (host unchanged)"),
                 ("format", "Format virtual drive; restore filesystem to default (format [drive])"),
                 ("reset", "Factory reset guest OS (filesystem, packages, state)"),
