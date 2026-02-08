@@ -1,3 +1,33 @@
 # Star-PY-OS
-python-based linux/unix terminal simulation
-THESE CODES WERE CREATED BY CLAUDE 4.5 SONNET
+
+Welcome to Star PY OS, it's a simulated GNU/Linux terminal box 
+based off Python. Pretty cool right?
+
+Type 'help' to view all commands!
+
+📦 View on GitHub: https://github.com/Brdyyy8-0298/Star-PY-OS
+
+🤖 Created by: Claude Sonnet 4.5
+💻 Written in: Python
+🔧 Customizable: You can modify all the code or ask an AI to view 
+   all features via GitHub!
+
+💬 Feedback: If you give feedback, I might not respond cuz you can 
+   update it yourself! Feel free to fork and customize.
+
+⚠️  Note: Memory is NOT persistent - changes are lost on exit.
+
+Features:
+  • Full simulated Linux filesystem
+  • Package manager (pkg)
+  • File editors (nano, vim)
+  • System monitors (htop, btop)
+  • Fun stuff (nyancat, cowsay, hollywood, cmatrix, cava)
+  • Web browser (lynx - fully functional TUI browser)
+  • Root access via sudo
+  • Sound simulation (beep, cava)
+  • Prank tools (virus, trojan, ransomware generators)
+  • Enhanced Midnight Commander with full features
+  • And much more!
+
+Enjoy exploring Star PY OS! ⭐
