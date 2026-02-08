@@ -7,7 +7,7 @@ Type 'help' to view all commands!
 
 📦 View on GitHub: https://github.com/Brdyyy8-0298/Star-PY-OS
 
-🤖 Created by: Cursor AI
+🤖 Created by: Claude 4.5 Sonnet on Google Antigravity!
 💻 Written in: Python
 🔧 Customizable: You can modify all the code or ask an AI to view 
    all features via GitHub!
