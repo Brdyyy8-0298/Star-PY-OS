@@ -1,6 +1,6 @@
 # Star OS
 
-Welcome to Star PY OS, it's a simulated GNU/Linux terminal box 
+Welcome to StarOS⭐, it's a simulated GNU/Linux terminal box 
 based off Python. Pretty cool right?
 
 ![53427](https://github.com/user-attachments/assets/76360537-3892-4008-a2e1-347bca4e733e)
