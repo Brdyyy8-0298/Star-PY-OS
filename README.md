@@ -3,14 +3,16 @@
 Welcome to Star PY OS, it's a simulated GNU/Linux terminal box 
 based off Python. Pretty cool right?
 
+![53427](https://github.com/user-attachments/assets/76360537-3892-4008-a2e1-347bca4e733e)
+
+
 Type 'help' to view all commands!
 
 📦 View on GitHub: https://github.com/Brdyyy8-0298/Star-PY-OS
 
-🤖 Created by: Claude 4.5 Sonnet on Google Antigravity!
+🤖 Created by: Google Antigravity!
 💻 Written in: Python
-🔧 Customizable: You can modify all the code or ask an AI to view 
-   all features via GitHub!
+🔧 Customizable: You can modify all the code
 
 💬 Feedback: If you give feedback, I might not respond cuz you can 
    update it yourself! Feel free to fork and customize.
@@ -30,4 +32,4 @@ Features:
   • Enhanced Midnight Commander with full features
   • And much more!
 
-Enjoy exploring Star PY OS! ⭐
+Enjoy exploring StarOS! ⭐
