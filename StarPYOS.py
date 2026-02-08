@@ -1344,6 +1344,117 @@ Links:
             sys.stdout.flush()
         print("\n" + Fore.RED + "OPERATION TERMINATED" + Style.RESET_ALL + "\n")
 
+    def reboot(self, args):
+        """Simulated reboot - harmless prank."""
+        print(Fore.YELLOW + "Broadcast message from root@Star-PY-OS (tty1):" + Style.RESET_ALL)
+        print(Fore.YELLOW + "  The system is going down for reboot NOW!" + Style.RESET_ALL)
+        print()
+        for msg in [
+            "Stopping cron daemon...",
+            "Stopping network manager...",
+            "Unmounting /home...",
+            "Unmounting /var...",
+            "Unmounting /usr...",
+            "Sending SIGTERM to all processes...",
+            "Saving random seed...",
+            "Rebooting...",
+        ]:
+            print(Fore.CYAN + " [ OK ] " + Style.RESET_ALL + msg)
+            time.sleep(0.2)
+        time.sleep(0.5)
+        print()
+        print(Fore.RED + "*** System will reboot in 5 seconds ***" + Style.RESET_ALL)
+        for i in range(5, 0, -1):
+            print(f"  {Fore.YELLOW}{i}...{Style.RESET_ALL}")
+            time.sleep(0.4)
+        print()
+        print(Fore.GREEN + Style.BRIGHT + "Just kidding! 😄 No reboot occurred. This is a simulation." + Style.RESET_ALL)
+        print()
+
+    def shutdown(self, args):
+        """Simulated shutdown - harmless prank."""
+        print(Fore.YELLOW + "Broadcast message from root@Star-PY-OS:" + Style.RESET_ALL)
+        print(Fore.YELLOW + "  The system is going down for halt NOW!" + Style.RESET_ALL)
+        print()
+        for msg in [
+            "Stopping user sessions...",
+            "Stopping display manager...",
+            "Stopping dbus...",
+            "Unmounting filesystems...",
+            "Deactivating swap...",
+            "Saving system state...",
+            "Power down.",
+        ]:
+            print(Fore.CYAN + " [ OK ] " + Style.RESET_ALL + msg)
+            time.sleep(0.25)
+        time.sleep(0.5)
+        print(Fore.RED + "System halted." + Style.RESET_ALL)
+        time.sleep(0.8)
+        print()
+        print(Fore.GREEN + Style.BRIGHT + "Just kidding! 😄 Your session is still running." + Style.RESET_ALL)
+        print()
+
+    def format_drive(self, args):
+        """Simulated format - harmless prank. Usage: format [drive] e.g. format C: or format /dev/sda1"""
+        drive = args[0] if args else "/dev/sda1"
+        print(Fore.RED + Style.BRIGHT + "⚠️  DISK FORMAT UTILITY (SIMULATION)" + Style.RESET_ALL)
+        print()
+        print(Fore.YELLOW + f"Target drive: {drive}" + Style.RESET_ALL)
+        print(Fore.YELLOW + "WARNING: All data on this drive will be PERMANENTLY ERASED!" + Style.RESET_ALL)
+        print()
+        time.sleep(0.5)
+        for pct in range(0, 101, 5):
+            bar_len = int(pct * 0.6)
+            bar = "█" * bar_len + "░" * (60 - bar_len)
+            print(f"\r{Fore.CYAN}[{bar}] {pct}% Formatting...{Style.RESET_ALL}", end="")
+            sys.stdout.flush()
+            time.sleep(0.15)
+        print()
+        print(Fore.RED + "Writing new partition table..." + Style.RESET_ALL)
+        time.sleep(0.3)
+        print("Creating filesystem (ext4)...")
+        time.sleep(0.3)
+        print("Verifying blocks...")
+        time.sleep(0.2)
+        print(Fore.GREEN + "Format complete." + Style.RESET_ALL)
+        print()
+        print(Fore.GREEN + Style.BRIGHT + "Just kidding! 😄 No drive was formatted. This is a simulation." + Style.RESET_ALL)
+        print()
+
+    def reset(self, args):
+        """Simulated factory reset - harmless prank."""
+        self._clear_screen()
+        print(Fore.RED + Style.BRIGHT + "╔═══════════════════════════════════════════════════════════════╗" + Style.RESET_ALL)
+        print(Fore.RED + Style.BRIGHT + "║              FACTORY RESET - STAR PY OS                        ║" + Style.RESET_ALL)
+        print(Fore.RED + Style.BRIGHT + "╚═══════════════════════════════════════════════════════════════╝" + Style.RESET_ALL)
+        print()
+        print(Fore.YELLOW + "⚠️  This will erase ALL data and restore the system to default state!" + Style.RESET_ALL)
+        print()
+        time.sleep(0.5)
+        stages = [
+            ("Backing up configuration", 10),
+            ("Wiping user data", 25),
+            ("Clearing package cache", 40),
+            ("Resetting filesystem", 55),
+            ("Restoring default layout", 70),
+            ("Reinitializing services", 85),
+            ("Finalizing reset", 100),
+        ]
+        for msg, pct in stages:
+            bar_len = int(pct * 0.5)
+            bar = "█" * bar_len + "░" * (50 - bar_len)
+            print(f"\r{Fore.CYAN}[{bar}] {pct}% {msg}...{Style.RESET_ALL}".ljust(80), end="")
+            sys.stdout.flush()
+            time.sleep(0.4)
+        print("\n")
+        time.sleep(0.5)
+        print(Fore.GREEN + "Factory reset complete. Restarting..." + Style.RESET_ALL)
+        time.sleep(0.8)
+        print()
+        print(Fore.GREEN + Style.BRIGHT + "Just kidding! 😄 Nothing was reset. This is a simulation." + Style.RESET_ALL)
+        print(Fore.CYAN + "Your virtual filesystem and session are unchanged." + Style.RESET_ALL)
+        print()
+
     def help(self, args):
         print(Fore.MAGENTA + "═" * self.terminal_width + Style.RESET_ALL)
         print(Fore.MAGENTA + Style.BRIGHT + "STAR PY OS - Available Commands".center(self.terminal_width) + Style.RESET_ALL)
@@ -1393,6 +1504,12 @@ Links:
                 ("virus", "Basic virus generator (PRANK)"),
                 ("trojan", "Trojan simulator (LONG PAYLOAD)"),
                 ("ransomware", "Ransomware simulator (CODE IN FILENAME)"),
+            ]),
+            ("SYSTEM (Simulated / Prank)", [
+                ("reboot", "Simulated system reboot (harmless)"),
+                ("shutdown", "Simulated system shutdown (harmless)"),
+                ("format", "Simulated disk format (format [drive])"),
+                ("reset", "Simulated factory reset (harmless)"),
             ]),
             ("OTHER", [
                 ("clear", "Clear screen"),
@@ -1481,6 +1598,14 @@ Links:
                     self.hollywood(args)
                 elif cmd == "mc":
                     self.mc(args)
+                elif cmd == "reboot":
+                    self.reboot(args)
+                elif cmd == "shutdown":
+                    self.shutdown(args)
+                elif cmd == "format" or cmd == "format-drive":
+                    self.format_drive(args)
+                elif cmd == "reset":
+                    self.reset(args)
                 elif cmd == "help":
                     self.help(args)
                 else:
