@@ -19,8 +19,10 @@ class SimpleShell:
         self.hostname = "Star-PY-OS"
         self.is_root = False
         self.installed_packages = ["python", "nano", "vim", "htop", "btop", "cowsay", "fastfetch", "lynx", "cmatrix", "cava"]
-        self.terminal_width = 160
-        self.terminal_height = 45
+        # Use dynamic terminal size for better 1920x1080 support
+        term_size = shutil.get_terminal_size(fallback=(200, 50))
+        self.terminal_width = term_size.columns
+        self.terminal_height = term_size.lines
 
     def _get_initial_state(self):
         """Return fresh (filesystem, files) for guest OS reset/format/reboot. Does not touch host."""
@@ -31,6 +33,7 @@ Welcome to Star PY OS, it's a simulated GNU/Linux terminal box
 based off Python. Pretty cool right?
 Type 'help' to view all commands!
 📦 View on GitHub: https://github.com/Brdyyy8-0298/Star-PY-OS
+🤖 Created by: Claude Sonnet 4.5
 💻 Written in: Python
 🔧 Customizable: You can modify all the code or ask an AI to view
 all features via GitHub!
@@ -700,8 +703,10 @@ Links:
         print(Fore.GREEN + "CMatrix - The Matrix Screensaver" + Style.RESET_ALL)
         print(Fore.YELLOW + "Press Ctrl+C to exit" + Style.RESET_ALL)
         time.sleep(1)
-        cols = min(self.terminal_width, 120)
-        rows = min(self.terminal_height, 30)
+        # Use full terminal dimensions for better 1920x1080 support
+        term_size = shutil.get_terminal_size(fallback=(200, 50))
+        cols = term_size.columns
+        rows = term_size.lines - 2  # Leave room for header
         drops = [0] * cols
         chars = ['0', '1', 'ア', 'イ', 'ウ', 'エ', 'オ', 'カ', 'キ', 'ク']
         # ANSI: hide cursor, then use cursor-home each frame to avoid clear flash
@@ -748,10 +753,13 @@ Links:
         print(Fore.MAGENTA + "CAVA - Console Audio Visualizer" + Style.RESET_ALL)
         print(Fore.YELLOW + "Simulating audio visualization - Press Ctrl+C to exit" + Style.RESET_ALL)
         time.sleep(1)
-        bars = 80
-        max_height = 20
-        header = Fore.CYAN + "♪ Now Playing: Simulated Audio Track ♪".center(self.terminal_width) + Style.RESET_ALL
-        footer = Fore.CYAN + "Bass".ljust(20) + "Mid".ljust(40) + "Treble".rjust(20) + Style.RESET_ALL
+        # Scale to terminal size for better 1920x1080 support
+        term_size = shutil.get_terminal_size(fallback=(200, 50))
+        bars = min(term_size.columns - 4, 200)  # Use most of width, cap at 200
+        max_height = min(term_size.lines - 6, 35)  # Use more vertical space
+        header = Fore.CYAN + "♪ Now Playing: Simulated Audio Track ♪".center(term_size.columns) + Style.RESET_ALL
+        footer_width = term_size.columns // 3
+        footer = Fore.CYAN + "Bass".ljust(footer_width) + "Mid".center(footer_width) + "Treble".rjust(footer_width) + Style.RESET_ALL
         CURSOR_HOME = "\033[H"
         CURSOR_HIDE = "\033[?25l"
         CURSOR_SHOW = "\033[?25h"
@@ -1220,6 +1228,9 @@ Links:
     def btop(self, args):
         print(Fore.YELLOW + "Press Ctrl+C to exit" + Style.RESET_ALL)
         time.sleep(1)
+        # Get terminal size for better scaling
+        term_size = shutil.get_terminal_size(fallback=(200, 50))
+        graph_width = min(term_size.columns - 15, 150)  # Scale graphs to terminal width
         CURSOR_HOME = "\033[H"
         CURSOR_HIDE = "\033[?25l"
         CURSOR_SHOW = "\033[?25h"
@@ -1229,27 +1240,27 @@ Links:
         try:
             while True:
                 lines = [
-                    Fore.MAGENTA + Style.BRIGHT + "╔" + "═" * (self.terminal_width - 2) + "╗" + Style.RESET_ALL,
-                    Fore.MAGENTA + Style.BRIGHT + "║" + "BTOP++ v1.2.13".center(self.terminal_width - 2) + "║" + Style.RESET_ALL,
-                    Fore.MAGENTA + Style.BRIGHT + "╚" + "═" * (self.terminal_width - 2) + "╝" + Style.RESET_ALL,
+                    Fore.MAGENTA + Style.BRIGHT + "╔" + "═" * (term_size.columns - 2) + "╗" + Style.RESET_ALL,
+                    Fore.MAGENTA + Style.BRIGHT + "║" + "BTOP++ v1.2.13".center(term_size.columns - 2) + "║" + Style.RESET_ALL,
+                    Fore.MAGENTA + Style.BRIGHT + "╚" + "═" * (term_size.columns - 2) + "╝" + Style.RESET_ALL,
                     "",
                     Fore.CYAN + "  CPU [8 cores]" + Style.RESET_ALL,
                 ]
                 for i in range(8):
                     usage = random.randint(5, 85)
-                    graph = "".join([random.choice(["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]) for _ in range(80)])
+                    graph = "".join([random.choice(["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]) for _ in range(graph_width)])
                     color = Fore.GREEN if usage < 50 else Fore.YELLOW if usage < 75 else Fore.RED
                     lines.append(f"  {i+1}: {color}{graph}{Style.RESET_ALL} {usage}%")
                 lines.append("")
                 mem = random.randint(35, 65)
-                mem_graph = "█" * int(mem * 0.8) + "░" * (80 - int(mem * 0.8))
+                mem_graph = "█" * int(mem * graph_width / 100) + "░" * (graph_width - int(mem * graph_width / 100))
                 lines.append(f"  {Fore.BLUE}MEM [{mem_graph}] {mem}%{Style.RESET_ALL}")
                 disk = random.randint(40, 70)
-                disk_graph = "█" * int(disk * 0.8) + "░" * (80 - int(disk * 0.8))
+                disk_graph = "█" * int(disk * graph_width / 100) + "░" * (graph_width - int(disk * graph_width / 100))
                 lines.append(f"  {Fore.YELLOW}DSK [{disk_graph}] {disk}%{Style.RESET_ALL}")
                 net_up = random.randint(100, 999)
                 net_down = random.randint(500, 2000)
-                lines.extend(["", f"{Fore.GREEN}NET ↑{net_up}KB/s ↓{net_down}KB/s{Style.RESET_ALL}", ""])
+                lines.extend(["", f"  {Fore.GREEN}NET ↑{net_up}KB/s ↓{net_down}KB/s{Style.RESET_ALL}", ""])
                 lines.append(Fore.CYAN + "  Top Processes:" + Style.RESET_ALL)
                 procs = [
                     ("python", random.randint(5, 25)),
@@ -1257,8 +1268,9 @@ Links:
                     ("firefox", random.randint(8, 30)),
                     ("systemd", random.randint(1, 5)),
                 ]
+                proc_bar_width = min(graph_width, 80)
                 for proc, cpu in procs:
-                    bar = "█" * int(cpu) + "░" * (50 - int(cpu))
+                    bar = "█" * int(cpu * proc_bar_width / 100) + "░" * (proc_bar_width - int(cpu * proc_bar_width / 100))
                     lines.append(f"    {proc:<12} [{Fore.GREEN}{bar}{Style.RESET_ALL}] {cpu}%")
                 sys.stdout.write(CURSOR_HOME)
                 sys.stdout.write("\n".join(lines) + "\n")
@@ -1290,6 +1302,9 @@ Links:
         print(Fore.GREEN + "HOLLYWOOD HACKER MODE" + Style.RESET_ALL)
         print(Fore.YELLOW + "Press Ctrl+C to exit" + Style.RESET_ALL)
         time.sleep(1)
+        # Get terminal size for better scaling
+        term_size = shutil.get_terminal_size(fallback=(200, 50))
+        bar_width = min(term_size.columns - 20, 120)
         CURSOR_HOME = "\033[H"
         CURSOR_HIDE = "\033[?25l"
         CURSOR_SHOW = "\033[?25h"
@@ -1300,41 +1315,42 @@ Links:
             iteration = 0
             while True:
                 lines = [
-                    Fore.GREEN + Style.BRIGHT + "╔" + "═" * (self.terminal_width - 2) + "╗" + Style.RESET_ALL,
-                    Fore.GREEN + Style.BRIGHT + "║" + "CLASSIFIED HACKING OPERATION v4.7".center(self.terminal_width - 2) + "║" + Style.RESET_ALL,
-                    Fore.GREEN + Style.BRIGHT + "╚" + "═" * (self.terminal_width - 2) + "╝" + Style.RESET_ALL,
+                    Fore.GREEN + Style.BRIGHT + "╔" + "═" * (term_size.columns - 2) + "╗" + Style.RESET_ALL,
+                    Fore.GREEN + Style.BRIGHT + "║" + "CLASSIFIED HACKING OPERATION v4.7".center(term_size.columns - 2) + "║" + Style.RESET_ALL,
+                    Fore.GREEN + Style.BRIGHT + "╚" + "═" * (term_size.columns - 2) + "╝" + Style.RESET_ALL,
                     "",
-                    Fore.CYAN + "┌─ PORT SCANNER " + "─" * (self.terminal_width - 20) + "┐" + Style.RESET_ALL,
+                    Fore.CYAN + "┌─ PORT SCANNER " + "─" * (term_size.columns - 20) + "┐" + Style.RESET_ALL,
                 ]
                 for i in range(3):
                     port = random.randint(1000, 9999)
                     status = random.choice(["OPEN", "CLOSED", "FILTERED"])
                     color = Fore.GREEN if status == "OPEN" else Fore.RED
                     lines.append(f"│ Port {port}: {color}{status}{Style.RESET_ALL}")
-                lines.extend([Fore.CYAN + "└" + "─" * (self.terminal_width - 2) + "┘" + Style.RESET_ALL, ""])
-                lines.append(Fore.YELLOW + "┌─ NETWORK TRAFFIC " + "─" * (self.terminal_width - 22) + "┐" + Style.RESET_ALL)
+                lines.extend([Fore.CYAN + "└" + "─" * (term_size.columns - 2) + "┘" + Style.RESET_ALL, ""])
+                lines.append(Fore.YELLOW + "┌─ NETWORK TRAFFIC " + "─" * (term_size.columns - 22) + "┐" + Style.RESET_ALL)
                 for i in range(3):
                     ip = f"192.168.{random.randint(1,255)}.{random.randint(1,255)}"
                     packets = random.randint(100, 9999)
                     lines.append(f"│ {ip} → {packets} packets")
-                lines.extend([Fore.YELLOW + "└" + "─" * (self.terminal_width - 2) + "┘" + Style.RESET_ALL, ""])
-                lines.append(Fore.MAGENTA + "┌─ DECRYPTION ENGINE " + "─" * (self.terminal_width - 24) + "┐" + Style.RESET_ALL)
+                lines.extend([Fore.YELLOW + "└" + "─" * (term_size.columns - 2) + "┘" + Style.RESET_ALL, ""])
+                lines.append(Fore.MAGENTA + "┌─ DECRYPTION ENGINE " + "─" * (term_size.columns - 24) + "┐" + Style.RESET_ALL)
                 for i in range(2):
-                    hex_str = ''.join([random.choice('0123456789ABCDEF') for _ in range(32)])
+                    hex_str = ''.join([random.choice('0123456789ABCDEF') for _ in range(min(64, term_size.columns - 10))])
                     lines.append(f"│ 0x{hex_str}")
                     progress = random.randint(60, 99)
-                    bar_len = int(progress * 0.8)
-                    bar = "█" * bar_len + "░" * (80 - bar_len)
+                    bar_len = int(progress * bar_width / 100)
+                    bar = "█" * bar_len + "░" * (bar_width - bar_len)
                     lines.append(f"│ [{Fore.GREEN}{bar}{Style.RESET_ALL}] {progress}%")
-                lines.extend([Fore.MAGENTA + "└" + "─" * (self.terminal_width - 2) + "┘" + Style.RESET_ALL, ""])
-                lines.append(Fore.RED + "┌─ SYSTEM ACCESS " + "─" * (self.terminal_width - 20) + "┐" + Style.RESET_ALL)
+                lines.extend([Fore.MAGENTA + "└" + "─" * (term_size.columns - 2) + "┘" + Style.RESET_ALL, ""])
+                lines.append(Fore.RED + "┌─ SYSTEM ACCESS " + "─" * (term_size.columns - 20) + "┐" + Style.RESET_ALL)
                 statuses = ["ATTEMPTING", "BYPASSING", "CRACKING", "ACCESSING"]
                 for i in range(2):
                     status = random.choice(statuses)
                     target = random.choice(["firewall", "database", "mainframe", "server"])
                     lines.append(f"│ {status} {target}...")
-                lines.extend([Fore.RED + "└" + "─" * (self.terminal_width - 2) + "┘" + Style.RESET_ALL, ""])
-                lines.append(Fore.GREEN + f"STATUS: {'▓' * random.randint(10, 50)} BREACHING MAINFRAME..." + Style.RESET_ALL)
+                lines.extend([Fore.RED + "└" + "─" * (term_size.columns - 2) + "┘" + Style.RESET_ALL, ""])
+                status_bar_len = random.randint(10, min(80, term_size.columns - 40))
+                lines.append(Fore.GREEN + f"STATUS: {'▓' * status_bar_len} BREACHING MAINFRAME..." + Style.RESET_ALL)
                 sys.stdout.write(CURSOR_HOME)
                 sys.stdout.write("\n".join(lines) + "\n")
                 sys.stdout.flush()
