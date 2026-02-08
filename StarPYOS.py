@@ -13,9 +13,9 @@ class SimpleShell:
         os.system('cls' if os.name == 'nt' else 'clear')
 
     def __init__(self):
-        self.current_dir = "/home/kenzo"
+        self.current_dir = "/home/user"
         self.filesystem, self.files = self._get_initial_state()
-        self.username = "kenzo"
+        self.username = "user"
         self.hostname = "Star-PY-OS"
         self.is_root = False
         self.installed_packages = ["python", "nano", "vim", "htop", "btop", "cowsay", "fastfetch", "lynx", "cmatrix", "cava"]
@@ -54,11 +54,11 @@ Enjoy exploring Star PY OS! ⭐
 """
         filesystem = {
             "/": ["home", "usr", "etc", "var", "tmp", "root"],
-            "/home": ["kenzo"],
-            "/home/kenzo": ["Documents", "Downloads", "Pictures", "README.txt"],
-            "/home/kenzo/Documents": [],
-            "/home/kenzo/Downloads": [],
-            "/home/kenzo/Pictures": [],
+            "/home": ["user"],
+            "/home/user": ["Documents", "Downloads", "Pictures", "README.txt"],
+            "/home/user/Documents": [],
+            "/home/user/Downloads": [],
+            "/home/user/Pictures": [],
             "/usr": ["bin", "lib"],
             "/usr/bin": [],
             "/usr/lib": [],
@@ -68,7 +68,7 @@ Enjoy exploring Star PY OS! ⭐
             "/tmp": [],
             "/root": []
         }
-        files = {"/home/kenzo/README.txt": readme_content}
+        files = {"/home/user/README.txt": readme_content}
         return filesystem, files
 
     def boot_screen(self):
@@ -117,8 +117,8 @@ Enjoy exploring Star PY OS! ⭐
 
     def get_prompt(self):
         cwd = self.current_dir
-        if cwd.startswith("/home/kenzo"):
-            cwd = "~" + cwd[11:]
+        if cwd.startswith("/home/user"):
+            cwd = "~" + cwd[10:]
         user_color = Fore.RED if self.is_root else Fore.GREEN
         user_name = "root" if self.is_root else self.username
         prompt_char = "#" if self.is_root else "$"
@@ -129,9 +129,9 @@ Enjoy exploring Star PY OS! ⭐
         if path.startswith("/"):
             return path.rstrip("/") or "/"
         elif path == "~":
-            return "/home/kenzo"
+            return "/home/user"
         elif path.startswith("~/"):
-            return "/home/kenzo" + path[1:].rstrip("/") or "/home/kenzo"
+            return "/home/user" + path[1:].rstrip("/") or "/home/user"
         elif path == "..":
             if self.current_dir == "/":
                 return "/"
@@ -180,7 +180,7 @@ Enjoy exploring Star PY OS! ⭐
 
     def cd(self, args):
         if not args:
-            self.current_dir = "/home/kenzo"
+            self.current_dir = "/home/user"
             return
         new_path = self.resolve_path(args[0])
         if new_path not in self.filesystem:
@@ -557,7 +557,7 @@ Enjoy exploring Star PY OS! ⭐
         print()
         # Create the key file with code in filename
         key_filename = f"DECRYPT_KEY_{decryption_code}.txt"
-        key_path = f"/home/kenzo/Downloads/{key_filename}"
+        key_path = f"/home/user/Downloads/{key_filename}"
         self.files[key_path] = f"""╔═══════════════════════════════════════════════════════════════╗
 ║              RANSOMWARE DECRYPTION INSTRUCTIONS               ║
 ╚═══════════════════════════════════════════════════════════════╝
@@ -570,7 +570,7 @@ Educational demonstration only - never create or deploy ransomware!
 To "decrypt" (end simulation), find the code in the filename above.
 """
         # File is in self.files so it will show in ls automatically
-        print(Fore.GREEN + f"💡 Hint: Check /home/kenzo/Downloads/" + Style.RESET_ALL)
+        print(Fore.GREEN + f"💡 Hint: Check /home/user/Downloads/" + Style.RESET_ALL)
         print(Fore.GREEN + f"💡 The decryption key is in the FILENAME, not the file contents!" + Style.RESET_ALL)
         print()
         time.sleep(2)
@@ -1198,11 +1198,11 @@ Links:
                 lines.extend(["", f"  Tasks: {Fore.CYAN}127{Style.RESET_ALL}, Load avg: {Fore.GREEN}1.2 1.5 1.8{Style.RESET_ALL}", f"  Uptime: {Fore.YELLOW}2:15:34{Style.RESET_ALL}", ""])
                 lines.append(f"  {Fore.BLACK}{Back.CYAN}  PID USER      CPU% MEM%   TIME+ COMMAND            {Style.RESET_ALL}")
                 processes = [
-                    (1234, "kenzo", random.randint(0, 15), random.randint(1, 5), "1:23.45", "python"),
-                    (5678, "kenzo", random.randint(0, 25), random.randint(2, 8), "0:45.12", "chrome"),
+                    (1234, "user", random.randint(0, 15), random.randint(1, 5), "1:23.45", "python"),
+                    (5678, "user", random.randint(0, 25), random.randint(2, 8), "0:45.12", "chrome"),
                     (9101, "root", random.randint(0, 5), random.randint(1, 3), "5:12.34", "systemd"),
-                    (1121, "kenzo", random.randint(0, 10), random.randint(1, 4), "0:15.67", "bash"),
-                    (3141, "kenzo", random.randint(0, 30), random.randint(3, 10), "2:34.89", "firefox"),
+                    (1121, "user", random.randint(0, 10), random.randint(1, 4), "0:15.67", "bash"),
+                    (3141, "user", random.randint(0, 30), random.randint(3, 10), "2:34.89", "firefox"),
                     (5161, "root", random.randint(0, 5), random.randint(0, 2), "0:05.23", "sshd"),
                 ]
                 for pid, user, cpu, mem, ptime, cmd in processes:
@@ -1367,7 +1367,7 @@ Links:
         time.sleep(0.3)
         # Restore guest OS state and show boot again (host unchanged)
         self.filesystem, self.files = self._get_initial_state()
-        self.current_dir = "/home/kenzo"
+        self.current_dir = "/home/user"
         self.is_root = False
         self.installed_packages = ["python", "nano", "vim", "htop", "btop", "cowsay", "fastfetch", "lynx", "cmatrix", "cava"]
         self._clear_screen()
@@ -1406,7 +1406,7 @@ Links:
             time.sleep(0.08)
         print()
         self.filesystem, self.files = self._get_initial_state()
-        self.current_dir = "/home/kenzo"
+        self.current_dir = "/home/user"
         print(Fore.GREEN + "Format complete. Virtual drive restored to default state." + Style.RESET_ALL)
         print()
 
@@ -1421,7 +1421,7 @@ Links:
             time.sleep(0.1)
         print()
         self.filesystem, self.files = self._get_initial_state()
-        self.current_dir = "/home/kenzo"
+        self.current_dir = "/home/user"
         self.is_root = False
         self.installed_packages = ["python", "nano", "vim", "htop", "btop", "cowsay", "fastfetch", "lynx", "cmatrix", "cava"]
         print(Fore.GREEN + "System reset to factory state." + Style.RESET_ALL)
