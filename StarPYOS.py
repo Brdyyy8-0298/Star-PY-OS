@@ -31,7 +31,6 @@ Welcome to Star PY OS, it's a simulated GNU/Linux terminal box
 based off Python. Pretty cool right?
 Type 'help' to view all commands!
 📦 View on GitHub: https://github.com/Brdyyy8-0298/Star-PY-OS
-🤖 Created by: Claude Sonnet 4.5
 💻 Written in: Python
 🔧 Customizable: You can modify all the code or ask an AI to view
 all features via GitHub!
